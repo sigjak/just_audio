@@ -26,24 +26,35 @@ class _SliderBarState extends State<SliderBar> {
                 }
                 return Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  child: Stack(
                     children: [
-                      Text(position.toString().split(".").first),
-                      Expanded(
-                        child: Slider(
-                          min: 0.0,
-                          max: duration.inMilliseconds.toDouble(),
-                          value: position.inMilliseconds.toDouble(),
-                          onChanged: (value) {
-                            setState(() {
-                              widget._audioPlayer
-                                  .seek(Duration(milliseconds: value.toInt()));
-                            });
-                          },
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Text(position.toString().split(".").first),
+                          Expanded(
+                            child: Slider(
+                              min: 0.0,
+                              max: duration.inMilliseconds.toDouble(),
+                              value: position.inMilliseconds.toDouble(),
+                              onChanged: (value) {
+                                setState(() {
+                                  widget._audioPlayer.seek(
+                                      Duration(milliseconds: value.toInt()));
+                                });
+                              },
+                            ),
+                          ),
+                          // Text(duration.toString().split(".").first)
+                        ],
                       ),
-                      Text(duration.toString().split(".").first)
+                      Positioned(
+                          top: 35,
+                          child: Text(position.toString().split(".").first)),
+                      Positioned(
+                          top: 35,
+                          right: 0,
+                          child: Text(duration.toString().split(".").first))
                     ],
                   ),
                 );
