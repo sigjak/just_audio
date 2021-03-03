@@ -56,7 +56,23 @@ class _PlayerState extends State<Player> {
         ),
       );
     });
-    _playList = ConcatenatingAudioSource(children: workList);
+    _playList = ConcatenatingAudioSource(children: [
+      // AudioSource.uri(
+      //   //mp3: http://fm939.wnyc.org/wnycfm
+      //   Uri.parse("http://am820.wnyc.org/wnycam"),
+      //   tag: AudioMetadata(
+      //     album: "Science Friday",
+      //     title: "WNYC AM820",
+      //   ),
+      // ),
+      AudioSource.uri(
+        Uri.parse("http://fm939.wnyc.org/wnycfm"),
+        tag: AudioMetadata(
+          album: "Science Friday",
+          title: "WNYC AM820",
+        ),
+      ),
+    ]);
     setState(() {});
   }
 
@@ -75,13 +91,13 @@ class _PlayerState extends State<Player> {
 
                   return state != null
                       ? Column(children: [
-                          Container(
-                            margin: EdgeInsets.symmetric(vertical: 20),
-                            height: 200,
-                            child: Image(
-                              image: AssetImage(state.sequence[0].tag.artwork),
-                            ),
-                          ),
+                          // Container(
+                          //   margin: EdgeInsets.symmetric(vertical: 20),
+                          //   height: 200,
+                          //   child: Image(
+                          //     image: AssetImage(state.sequence[0].tag.artwork),
+                          //   ),
+                          // ),
                           Text(state.sequence[0].tag.album,
                               style: TextStyle(fontSize: 20)),
                           Text(state.sequence[state.currentIndex].tag.title)
