@@ -31,7 +31,6 @@ class _SliderBarState extends State<SliderBar> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Text(position.toString().split(".").first),
                           Expanded(
                             child: Slider(
                               min: 0.0,
@@ -45,7 +44,6 @@ class _SliderBarState extends State<SliderBar> {
                               },
                             ),
                           ),
-                          // Text(duration.toString().split(".").first)
                         ],
                       ),
                       Positioned(
@@ -62,7 +60,7 @@ class _SliderBarState extends State<SliderBar> {
         });
   }
 
-  Widget seekBar(context, position) {
-    return Text(position.toString());
-  }
+  // Widget seekBar(context, position) {
+  //   return Text(position.toString());
+  // }
 }
