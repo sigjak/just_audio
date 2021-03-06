@@ -65,8 +65,30 @@ class _PlayerState extends State<Player> {
       //     title: "WNYC AM820",
       //   ),
       // ),
+      // AudioSource.uri(
+      //   Uri.parse("http://fm939.wnyc.org/wnycfm"),
+      //   tag: AudioMetadata(
+      //     album: "Science Friday",
+      //     title: "WNYC AM820",
+      //   ),
+      // ),
+      // AudioSource.uri(
+      //   Uri.parse("http://bbcwssc.ic.llnwd.net/stream/bbcwssc_mp1_ws-einws"),
+      //   tag: AudioMetadata(
+      //     album: "Science Friday",
+      //     title: "WNYC AM820",
+      //   ),
+      // ),
+      //       AudioSource.uri(
+      //   Uri.parse(
+      //       "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/nonuk/sbr_vlow/llnw/bbc_world_service.m3u8"),
+      //   tag: AudioMetadata(
+      //     album: "Science Friday",
+      //     title: "WNYC AM820",
+      //   ),
+      // ),
       AudioSource.uri(
-        Uri.parse("http://fm939.wnyc.org/wnycfm"),
+        Uri.parse("http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"),
         tag: AudioMetadata(
           album: "Science Friday",
           title: "WNYC AM820",

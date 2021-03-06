@@ -1,5 +1,7 @@
+import 'package:JustAudio/screens/select.dart';
 import 'package:flutter/material.dart';
 import './screens/player.dart';
+import './screens/select.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +14,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData(
           brightness: Brightness.light, primaryColor: Color(0xFF9E9E9E)),
-      home: Player(),
+      home: Selecting(),
     );
   }
 }
