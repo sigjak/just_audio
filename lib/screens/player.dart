@@ -6,11 +6,13 @@ import 'package:just_audio/just_audio.dart';
 import './commons/player_buttons.dart';
 import './commons/slider.dart';
 import '../screens/helpers/meta.dart';
+import 'package:provider/provider.dart';
+import './helpers/data_provider.dart';
 
 class Player extends StatefulWidget {
-  final List<Station> stations;
+  // final List<Station> stations;
   final int index;
-  const Player(this.stations, this.index);
+  const Player(this.index);
   @override
   _PlayerState createState() => _PlayerState();
 }
@@ -24,14 +26,23 @@ class _PlayerState extends State<Player> {
   @override
   void initState() {
     super.initState();
+    final data = Provider.of<DataProvider>(context, listen: false);
     _audioPlayer = AudioPlayer();
+    AudioSource radio = AudioSource.uri(
+      Uri.parse(data.stations[widget.index].source),
+      tag: AudioMetadata(
+          album: data.stations[widget.index].name,
+          title: data.stations[widget.index].name,
+          artwork: data.stations[widget.index].logo),
+    );
+    _audioPlayer.setAudioSource(radio);
 
-    getAssetFiles().then((_) {
-      _audioPlayer.setAudioSource(_playList).catchError((error) {
-        // catch load errors: 404, invalid url ...
-        print("An error occured $error");
-      });
-    });
+    // getAssetFiles().then((_) {
+    //   _audioPlayer.setAudioSource(_playList).catchError((error) {
+    //     // catch load errors: 404, invalid url ...
+    //     print("An error occured $error");
+    //   });
+    // });
   }
 
   @override
@@ -60,29 +71,30 @@ class _PlayerState extends State<Player> {
         ),
       );
     });
-    _playList = ConcatenatingAudioSource(children: [
-      // AudioSource.uri(
-      //   //mp3: http://fm939.wnyc.org/wnycfm
-      //   Uri.parse("http://am820.wnyc.org/wnycam"),
-      //   tag: AudioMetadata(
-      //     album: "Science Friday",
-      //     title: "WNYC AM820",
-      //   ),
-      // ),
+    // _playList = ConcatenatingAudioSource(children: [
+    //   // AudioSource.uri(
+    //   //   //mp3: http://fm939.wnyc.org/wnycfm
+    //   //   Uri.parse("http://am820.wnyc.org/wnycam"),
+    //   //   tag: AudioMetadata(
+    //   //     album: "Science Friday",
+    //   //     title: "WNYC AM820",
+    //   //   ),
+    //   // ),
 
-      AudioSource.uri(
-        Uri.parse(widget.stations[widget.index].source),
-        tag: AudioMetadata(
-            album: widget.stations[widget.index].name,
-            title: widget.stations[widget.index].name,
-            artwork: widget.stations[widget.index].logo),
-      ),
-    ]);
+    //   AudioSource.uri(
+    //     Uri.parse(widget.stations[widget.index].source),
+    //     tag: AudioMetadata(
+    //         album: widget.stations[widget.index].name,
+    //         title: widget.stations[widget.index].name,
+    //         artwork: widget.stations[widget.index].logo),
+    //   ),
+    // ]);
     setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    final data = Provider.of<DataProvider>(context);
     return Scaffold(
       backgroundColor: Colors.blue[50],
       appBar: AppBar(title: Text('Audioplayer')),
@@ -128,13 +140,13 @@ class _PlayerState extends State<Player> {
                         ),
                         Expanded(
                           child: ListView.builder(
-                            itemCount: widget.stations.length,
+                            itemCount: data.stations.length,
                             itemBuilder: (BuildContext ctx, int index) {
                               return Card(
                                 margin: EdgeInsets.fromLTRB(16, 2, 16, 0),
                                 child: ListTile(
                                   //leading: Image( AssetImage(widget.stations[index].logo),
-                                  title: Text(widget.stations[index].name),
+                                  title: Text(data.stations[index].name),
                                   trailing: IconButton(
                                     onPressed: () async {
                                       await _audioPlayer
