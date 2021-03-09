@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/station.dart';
-import '../screens/second.dart';
+
+import '../screens/player.dart';
 
 class Selecting extends StatelessWidget {
   final List<Station> stations = [
@@ -11,18 +12,50 @@ class Selecting extends StatelessWidget {
     Station(
         name: 'WNYC 93.9',
         source: 'http://fm939.wnyc.org/wnycfm',
-        logo: 'assets/images/wnyc.png')
+        logo: 'assets/images/wnyc.png'),
+    Station(
+        name: 'RUV Rás 1',
+        source: 'http://netradio.ruv.is/ras1.mp3',
+        logo: 'assets/images/ras_1.png'),
+    Station(
+        name: 'RUV Rás 2',
+        source: 'http://netradio.ruv.is/ras2.mp3',
+        logo: 'assets/images/ras_2.png'),
+    Station(
+        name: 'WAMU',
+        source: 'http://wamu-1.streamguys.com',
+        logo: 'assets/images/wamu.png'),
+    Station(
+        name: 'WBUR',
+        source: 'https://icecast-stream.wbur.org/wbur',
+        logo: 'assets/images/wbur.png'),
+    Station(
+        name: 'Bylgjan',
+        source: 'http://stream3.radio.is:443/tbylgjan',
+        logo: 'assets/images/bylgjan.png'),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              height: 100,
-              child: ListView.builder(
+        body: Container(
+          margin: EdgeInsets.only(top: 16),
+          height: 180,
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            border: Border.all(color: Colors.black),
+          ),
+          child: Stack(
+            children: [
+              Positioned(
+                top: 15,
+                left: 12,
+                child: Text(
+                  'Radio',
+                  style: TextStyle(fontSize: 22),
+                ),
+              ),
+              ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: stations.length,
                   itemBuilder: (BuildContext context, int index) {
@@ -33,9 +66,8 @@ class Selecting extends StatelessWidget {
                           print(stations[index].source);
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                                builder: (context) => Second(),
-                                settings: RouteSettings(
-                                    arguments: stations[index].source)),
+                              builder: (context) => Player(stations, index),
+                            ),
                           );
                         },
                         child: Image(
@@ -46,8 +78,8 @@ class Selecting extends StatelessWidget {
                       ),
                     );
                   }),
-            )
-          ],
+            ],
+          ),
         ));
   }
 }

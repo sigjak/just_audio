@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import '../models/station.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
@@ -8,6 +8,9 @@ import './commons/slider.dart';
 import '../screens/helpers/meta.dart';
 
 class Player extends StatefulWidget {
+  final List<Station> stations;
+  final int index;
+  const Player(this.stations, this.index);
   @override
   _PlayerState createState() => _PlayerState();
 }
@@ -17,6 +20,7 @@ class _PlayerState extends State<Player> {
   ConcatenatingAudioSource _playList;
   List<AudioSource> workList = [];
   List<String> audioFiles = [];
+  bool isRadio = false;
   @override
   void initState() {
     super.initState();
@@ -65,34 +69,13 @@ class _PlayerState extends State<Player> {
       //     title: "WNYC AM820",
       //   ),
       // ),
-      // AudioSource.uri(
-      //   Uri.parse("http://fm939.wnyc.org/wnycfm"),
-      //   tag: AudioMetadata(
-      //     album: "Science Friday",
-      //     title: "WNYC AM820",
-      //   ),
-      // ),
-      // AudioSource.uri(
-      //   Uri.parse("http://bbcwssc.ic.llnwd.net/stream/bbcwssc_mp1_ws-einws"),
-      //   tag: AudioMetadata(
-      //     album: "Science Friday",
-      //     title: "WNYC AM820",
-      //   ),
-      // ),
-      //       AudioSource.uri(
-      //   Uri.parse(
-      //       "http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/nonuk/sbr_vlow/llnw/bbc_world_service.m3u8"),
-      //   tag: AudioMetadata(
-      //     album: "Science Friday",
-      //     title: "WNYC AM820",
-      //   ),
-      // ),
+
       AudioSource.uri(
-        Uri.parse("http://stream.live.vc.bbcmedia.co.uk/bbc_world_service"),
+        Uri.parse(widget.stations[widget.index].source),
         tag: AudioMetadata(
-          album: "Science Friday",
-          title: "WNYC AM820",
-        ),
+            album: widget.stations[widget.index].name,
+            title: widget.stations[widget.index].name,
+            artwork: widget.stations[widget.index].logo),
       ),
     ]);
     setState(() {});
@@ -113,13 +96,13 @@ class _PlayerState extends State<Player> {
 
                   return state != null
                       ? Column(children: [
-                          // Container(
-                          //   margin: EdgeInsets.symmetric(vertical: 20),
-                          //   height: 200,
-                          //   child: Image(
-                          //     image: AssetImage(state.sequence[0].tag.artwork),
-                          //   ),
-                          // ),
+                          Container(
+                            margin: EdgeInsets.symmetric(vertical: 20),
+                            height: 200,
+                            child: Image(
+                              image: AssetImage(state.sequence[0].tag.artwork),
+                            ),
+                          ),
                           Text(state.sequence[0].tag.album,
                               style: TextStyle(fontSize: 20)),
                           Text(state.sequence[state.currentIndex].tag.title)
@@ -128,36 +111,49 @@ class _PlayerState extends State<Player> {
                 }),
             PlayerButtons(_audioPlayer),
             SliderBar(_audioPlayer),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 5),
-              child: Text(
-                'Episodes',
-                style: TextStyle(fontSize: 18),
-              ),
+            SizedBox(
+              height: 5,
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: audioFiles.length,
-                itemBuilder: (BuildContext ctx, int index) {
-                  return Card(
-                    margin: EdgeInsets.fromLTRB(16, 2, 16, 0),
-                    child: ListTile(
-                      title: Text(audioFiles[index]),
-                      trailing: IconButton(
-                        onPressed: () async {
-                          await _audioPlayer.setAudioSource(_playList);
-                          //
-                          _audioPlayer.seek(Duration(seconds: 12),
-                              index: index);
-                          _audioPlayer.play();
-                        },
-                        icon: Icon(Icons.play_arrow),
-                      ),
+            isRadio
+                ? SizedBox()
+                : Expanded(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            'Episodes',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: widget.stations.length,
+                            itemBuilder: (BuildContext ctx, int index) {
+                              return Card(
+                                margin: EdgeInsets.fromLTRB(16, 2, 16, 0),
+                                child: ListTile(
+                                  //leading: Image( AssetImage(widget.stations[index].logo),
+                                  title: Text(widget.stations[index].name),
+                                  trailing: IconButton(
+                                    onPressed: () async {
+                                      await _audioPlayer
+                                          .setAudioSource(_playList);
+                                      //
+                                      _audioPlayer.seek(Duration(seconds: 12),
+                                          index: index);
+                                      _audioPlayer.play();
+                                    },
+                                    icon: Icon(Icons.play_arrow),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
-            ),
+                  )
           ],
         ),
       ),

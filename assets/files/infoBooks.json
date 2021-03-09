@@ -1,0 +1,16 @@
+[
+    {
+        "isRadio": false,
+        "name": "The Guardians",
+        "source": "http://",
+        "logo": "some logo",
+        "artwork": "assets/xxx/sdsd"
+    },
+    {
+        "isRadio": true,
+        "name": "The Guardians",
+        "source": "http://",
+        "logo": "some logo",
+        "artwork": "assets/xxx/sdsd"
+    }
+]

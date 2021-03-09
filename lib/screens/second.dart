@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-//import '../models/station.dart';
+import '../models/station.dart';
 
 class Second extends StatefulWidget {
-  //final String station;
-  // const Second(this.station);
+  final Station stations;
+  const Second(this.stations);
   @override
   _SecondState createState() => _SecondState();
 }
@@ -11,37 +11,20 @@ class Second extends StatefulWidget {
 class _SecondState extends State<Second> {
   String station;
   String mine = 'bla';
-  initMine() {
-    setState(() {
-      mine = station;
-    });
-  }
-
   @override
   void initState() {
-    mine = 'bobob';
-    print('initstate');
-
+    mine = widget.stations.name;
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    mine = 'station';
-    print('didchange');
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    station = ModalRoute.of(context).settings.arguments;
-    //initMine();
     print('before Scaffold');
     return Scaffold(
       appBar: AppBar(),
       body: Column(
         children: [
-          Text(station),
+          Text(widget.stations.source),
           Text(mine),
         ],
       ),
