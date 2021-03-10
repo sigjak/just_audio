@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import './helpers/data_provider.dart';
 
 class Player extends StatefulWidget {
-  // final List<Station> stations;
   final int index;
   const Player(this.index);
   @override
@@ -19,23 +18,25 @@ class Player extends StatefulWidget {
 
 class _PlayerState extends State<Player> {
   AudioPlayer _audioPlayer;
-  ConcatenatingAudioSource _playList;
+  // ConcatenatingAudioSource _playList;
   List<AudioSource> workList = [];
   List<String> audioFiles = [];
   bool isRadio = false;
   @override
   void initState() {
     super.initState();
-    final data = Provider.of<DataProvider>(context, listen: false);
     _audioPlayer = AudioPlayer();
-    AudioSource radio = AudioSource.uri(
-      Uri.parse(data.stations[widget.index].source),
-      tag: AudioMetadata(
-          album: data.stations[widget.index].name,
-          title: data.stations[widget.index].name,
-          artwork: data.stations[widget.index].logo),
-    );
-    _audioPlayer.setAudioSource(radio);
+    initRadio(widget.index);
+    // final data = Provider.of<DataProvider>(context, listen: false);
+    // _audioPlayer = AudioPlayer();
+    // AudioSource radio = AudioSource.uri(
+    //   Uri.parse(data.stations[widget.index].source),
+    //   tag: AudioMetadata(
+    //       album: data.stations[widget.index].name,
+    //       title: data.stations[widget.index].name,
+    //       artwork: data.stations[widget.index].logo),
+    // );
+    // _audioPlayer.setAudioSource(radio);
 
     // getAssetFiles().then((_) {
     //   _audioPlayer.setAudioSource(_playList).catchError((error) {
@@ -45,10 +46,37 @@ class _PlayerState extends State<Player> {
     // });
   }
 
+  // Future<void> _init() async {
+  //   final session = await AudioSession.instance;
+  //   await session.configure(AudioSessionConfiguration.speech());
+  //   try {
+  //     await _player.setAudioSource(_playlist);
+  //   } catch (e) {
+  //     // catch load errors: 404, invalid url ...
+  //     print("An error occured $e");
+  //   }
+  // }
+
+  initRadio(index) async {
+    print('INIT  ------------------------            $index');
+    final data = Provider.of<DataProvider>(context, listen: false);
+    // _audioPlayer = AudioPlayer();
+    AudioSource radio = AudioSource.uri(
+      Uri.parse(data.stations[index].source),
+      tag: AudioMetadata(
+          album: data.stations[index].name,
+          title: data.stations[index].name,
+          artwork: data.stations[index].logo),
+    );
+    await _audioPlayer.setAudioSource(radio);
+    setState(() {});
+  }
+
   @override
   void dispose() {
     _audioPlayer.dispose();
     super.dispose();
+    print('dispose');
   }
 
   Future<void> getAssetFiles() async {
@@ -71,24 +99,7 @@ class _PlayerState extends State<Player> {
         ),
       );
     });
-    // _playList = ConcatenatingAudioSource(children: [
-    //   // AudioSource.uri(
-    //   //   //mp3: http://fm939.wnyc.org/wnycfm
-    //   //   Uri.parse("http://am820.wnyc.org/wnycam"),
-    //   //   tag: AudioMetadata(
-    //   //     album: "Science Friday",
-    //   //     title: "WNYC AM820",
-    //   //   ),
-    //   // ),
 
-    //   AudioSource.uri(
-    //     Uri.parse(widget.stations[widget.index].source),
-    //     tag: AudioMetadata(
-    //         album: widget.stations[widget.index].name,
-    //         title: widget.stations[widget.index].name,
-    //         artwork: widget.stations[widget.index].logo),
-    //   ),
-    // ]);
     setState(() {});
   }
 
@@ -96,7 +107,7 @@ class _PlayerState extends State<Player> {
   Widget build(BuildContext context) {
     final data = Provider.of<DataProvider>(context);
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.grey[400],
       appBar: AppBar(title: Text('Audioplayer')),
       body: Center(
         child: Column(
@@ -149,13 +160,17 @@ class _PlayerState extends State<Player> {
                                   title: Text(data.stations[index].name),
                                   trailing: IconButton(
                                     onPressed: () async {
-                                      await _audioPlayer
-                                          .setAudioSource(_playList);
-                                      //
-                                      _audioPlayer.seek(Duration(seconds: 12),
-                                          index: index);
-                                      _audioPlayer.play();
+                                      await _audioPlayer.stop();
+                                      initRadio(index);
                                     },
+                                    // onPressed: () async {
+                                    //   await _audioPlayer
+                                    //       .setAudioSource(_playList);
+                                    //   //
+                                    //   _audioPlayer.seek(Duration(seconds: 12),
+                                    //       index: index);
+                                    //   _audioPlayer.play();
+                                    // },
                                     icon: Icon(Icons.play_arrow),
                                   ),
                                 ),
